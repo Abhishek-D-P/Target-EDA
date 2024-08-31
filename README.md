@@ -1,4 +1,7 @@
-#1	Import the dataset and do usual exploratory analysis steps like checking the structure & characteristics of the dataset
+# Target Sales Data Analysis
+
+
+## 1	Import the dataset and do usual exploratory analysis steps like checking the structure & characteristics of the dataset
 1.1	Data type of all columns in the "customers" table
 •	Customer_id: String
 •	Customer_unique_id: String
@@ -33,7 +36,7 @@ where C.customer_state is not null and C.customer_city is not null
 Observation: During this time period, total number of cities are 4119 and total number of states are 27
 
 
-#2	IN depth exploration:
+## 2	IN depth exploration:
 2.1	Is there a growing trend in the number of orders placed over the past years.
 Query:
 create view `scaler-dsml-sql-405717.target.month_wise_orders` as 
@@ -55,7 +58,7 @@ Results:
 
 Observation: There is a growing trend in the number of orders till Jan 2018 and then the number of orders have settled in the range of 6000 to 7300 range and then there is a fall in the number of orders from sep 2018 onwards 
 
-#2.2	Can we see some kind of monthly seasonality in terms of the no. of orders being placed?
+2.2	Can we see some kind of monthly seasonality in terms of the no. of orders being placed?
 select month,year,round(100*((no_of_orders/lag(no_of_orders,1)over (order by year,parse_date("%b",month)))-1),1) percentage_change_in_orders_per_month,from 
 `scaler-dsml-sql-405717.target.month_wise_orders`
 order by parse_date("%b",month),year
@@ -67,7 +70,7 @@ Results:
 
 Observation: There is no such obvious seasonality in the number of orders. However, it isobserved that there is a drop in sales in the month of april and june by around 10% and increase in the month of august by around 3 to 7%.
 
-#2.3	During what time of the day, do the Brazilian customers mostly place their orders?
+2.3	During what time of the day, do the Brazilian customers mostly place their orders?
 Query: 
 with base as (
 select *,
@@ -96,7 +99,7 @@ Results:
 
 Observation: maximum of the orders are placed in afternoon with 38135 orders. Then night, morning and dawn with 28331, 27733 and 5242 respectively. 
 
-#3	Evolution of E-commerce orders in the Brazil region
+## 3	Evolution of E-commerce orders in the Brazil region
 3.1	Get the month on month no. of orders placed in each state?
 Query: 
 with base as(
@@ -131,7 +134,7 @@ results:
  
 Observations: maximum number of customer are from state SP with 41746 and minimum number of customers are from state RR with 46 customers. 
 
-#4	Impact on Economy: Analyze the money movement by e-commerce by looking at order prices, freight and others.
+## 4	Impact on Economy: Analyze the money movement by e-commerce by looking at order prices, freight and others.
 4.1	Get the % increase in the cost of orders from year 2017 to 2018 (include months between Jan to Aug only).
 Query: 
 with base as (
@@ -202,7 +205,8 @@ Results:
 Observations: 
 The state with highest total freight value is SP with 718723.07.
 The state with highest avg freight value is RR with 42.9 
-5	Analysis based on sales, freight and delivery time
+
+## 5	Analysis based on sales, freight and delivery time
 5.1	Find the no. of days taken to deliver each order from the order’s purchase date as delivery time. Also, calculate the difference (in days) between the estimated & actual delivery date of an order. 
 Query:
 select order_id,date(order_purchase_timestamp)order_date,date(order_delivered_customer_date)delivery_date,
@@ -355,7 +359,7 @@ Results:
 Observation: 
 The top 5 states with fastest delivery are as shown. These observation are made based on the difference in average delivery date and average estimated date for each state. 
  
-#6	Analysis based on the payments:
+## 6	Analysis based on the payments:
 6.1	Find the month on month no. of orders placed using different payment types.
 Query: 
 with base as (
@@ -442,9 +446,9 @@ Result:
 Observation: Most of the delivery issues are coming from orders where both seller and customer state is SP. This is happening because highest orders are from state SP. It would be recommended to prioritise in state delivery time in state SP or increase the delivery agents in the state SP.
 
 
-
-
-
+# Recommendations
+Delivery Improvement: Prioritize deliveries within the SP state to reduce complaints related to delivery delays.
+Increase Delivery Agents: Particularly in SP to handle the high order volume.
 
 
 
